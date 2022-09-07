@@ -8,5 +8,5 @@ jobs:
         uses: actions/checkout@v2
       - name: docker build
         run: docker build -t devoind/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
-      -name: docker push
+      - name: docker push
         run: docker push devoind/flask-app:$GITHUB_REF_NAME-$GITHUB_RUN_ID
