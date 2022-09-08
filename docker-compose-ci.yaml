@@ -20,6 +20,12 @@ services:
       pg:
         condition: service_healthy
     command: flask db upgrade
+  pg:
+    image: devoind/flask-app
+    environment:
+      POSTRGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
