@@ -1,5 +1,5 @@
-name: Build and deploy my_action
-on: [ push ]
+name: Build and deploy action
+on: [push]
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
     env:
-      DB_USER: ${{ secrets.DB_USER }}
+      DB_USER: postgres
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_NAME: ${{ secrets.DB_NAME }}
     steps:
@@ -27,13 +27,13 @@ jobs:
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
           cat docker_ci_config.py | envsubst > deploy/docker_config.py
-      - name: copy my_files to server
+      - name: clone files to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          source: "deploy/docker-compose.yaml, deploy/docker_config.py"
+          source: "deploy/docker-compose.yaml,deploy/docker_config.py"
           target: "flask_app_ci"
           strip_components: 1
       - name: run docker-compose
@@ -42,6 +42,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          script: | 
+          script: |
             cd flask_app_ci
             echo ${{ secrets.PASSWORD }} | sudo -S docker-compose up -d
