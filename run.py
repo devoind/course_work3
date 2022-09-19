@@ -1,5 +1,4 @@
 # Основная программа
-
 import default_config
 from app.posts.views import posts_blueprint
 from app.api.views import api_blueprint
