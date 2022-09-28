@@ -1,11 +1,12 @@
 # Основная программа
-import default_config
+from flask import Flask
+
 from app.posts.views import posts_blueprint
 from app.api.views import api_blueprint
 from app import logger
-from setup import create_app
 
-app = create_app(default_config)
+app = Flask(__name__)
+app.config["JSON_AS_ASCII"] = False
 
 logger.create_logger()
 
